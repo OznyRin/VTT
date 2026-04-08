@@ -75,3 +75,20 @@ text = "Mes personnages"
 custom_minimum_size = Vector2(400, 50)
 layout_mode = 2
 text = "Paramètres"
+
+[node name="VersionLabel" type="Label" parent="." unique_id=101141084]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -84.244995
+offset_top = -23.08496
+offset_right = -11.244995
+offset_bottom = -3.084961
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.5411765, 0.5254902, 0.5019608, 1)
+theme_override_font_sizes/font_size = 12
+text = "v0.1.0 - Alpha"

@@ -41,3 +41,8 @@ func _ready():
 		btn.add_theme_stylebox_override("pressed", secondary_hover)
 		btn.add_theme_color_override("font_color", Color("#F0EDE8"))
 		btn.add_theme_color_override("font_hover_color", Color("#F5A623"))
+	
+	$CenterContainer/BtnMyTables.pressed.connect(_on_my_tables_pressed)
+
+func _on_my_tables_pressed():
+	get_tree().change_scene_to_file("res://scenes/my_tables.tscn")
