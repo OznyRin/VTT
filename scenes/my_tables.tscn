@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://fo0w5k7fqd30"]
 
+[ext_resource type="Script" uid="uid://csib23sel2cyh" path="res://scenes/my_tables.gd" id="1_hf267"]
+
 [node name="MyTables" type="Control" unique_id=146740709]
 layout_mode = 3
 anchors_preset = 15
@@ -7,6 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_hf267")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1886553133]
 layout_mode = 1
@@ -17,18 +20,62 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 
-[node name="Mestables" type="Label" parent="." unique_id=338863084]
+[node name="NavBar" type="PanelContainer" parent="." unique_id=719983401]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -109.5
-offset_top = -11.5
-offset_right = 109.5
-offset_bottom = 11.5
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=977225830]
+layout_mode = 2
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=1096168476]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="NavTitle" type="Label" parent="NavBar/HBoxContainer" unique_id=1178373606]
+layout_mode = 2
+text = "/ Mes tables"
+
+[node name="Content" type="MarginContainer" parent="." unique_id=2143964805]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.9411765, 0.92941177, 0.9098039, 1)
-text = "Mes tables (en construction)"
+mouse_filter = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 80
+
+[node name="VBox" type="VBoxContainer" parent="Content" unique_id=1389685018]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Header" type="HBoxContainer" parent="Content/VBox" unique_id=1224919023]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="PageTitle" type="Label" parent="Content/VBox/Header" unique_id=522925060]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mes tables"
+
+[node name="BtnNewTable" type="Button" parent="Content/VBox/Header" unique_id=367977865]
+layout_mode = 2
+text = "+ Nouvelle table"
+
+[node name="CardsGrid" type="HBoxContainer" parent="Content/VBox" unique_id=632315256]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 24
+
+[node name="Card1" type="PanelContainer" parent="Content/VBox/CardsGrid" unique_id=1768644326]
+custom_minimum_size = Vector2(400, 220)
+layout_mode = 2
+
+[node name="Card2" type="PanelContainer" parent="Content/VBox/CardsGrid" unique_id=2119045310]
+custom_minimum_size = Vector2(400, 220)
+layout_mode = 2

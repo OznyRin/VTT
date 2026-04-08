@@ -1,3 +1,5 @@
 res://scenes/main_menu.tscn
 res://themes/main_theme.tres
 res://scenes/main_menu.gd
+res://scenes/my_tables.tscn
+res://scenes/my_tables.gd
