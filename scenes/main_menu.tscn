@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://geiek7tpymfu"]
 
+[ext_resource type="Theme" uid="uid://dwblalsrxcev1" path="res://themes/main_theme.tres" id="1_l6cm7"]
+[ext_resource type="Script" uid="uid://ethvcapref75" path="res://scenes/main_menu.gd" id="2_ekxnf"]
+
 [node name="MainMenu" type="Control" unique_id=1054121793]
 layout_mode = 3
 anchors_preset = 15
@@ -7,18 +10,68 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_l6cm7")
+script = ExtResource("2_ekxnf")
 
-[node name="Label" type="Label" parent="." unique_id=394454130]
+[node name="Background" type="ColorRect" parent="." unique_id=1197878377]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="CenterContainer" type="VBoxContainer" parent="." unique_id=1924826975]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -104.0
-offset_top = -11.5
-offset_right = 104.0
-offset_bottom = 11.5
+offset_left = -200.0
+offset_top = -223.5
+offset_right = 200.0
+offset_bottom = 223.5
 grow_horizontal = 2
 grow_vertical = 2
-text = "Bienvenue sur POUSROLES"
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="CenterContainer" unique_id=1115417122]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_font_sizes/font_size = 64
+text = "POUSROLES"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="CenterContainer" unique_id=2065213233]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5411765, 0.5254902, 0.5019608, 1)
+theme_override_font_sizes/font_size = 18
+text = "Table de jeu virtuelle"
+horizontal_alignment = 1
+
+[node name="BtnCreate" type="Button" parent="CenterContainer" unique_id=591976630]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+text = "Créer une table"
+
+[node name="BtnJoin" type="Button" parent="CenterContainer" unique_id=57928274]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+text = "Rejoindre une table"
+
+[node name="BtnMyTables" type="Button" parent="CenterContainer" unique_id=885977142]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+text = "Mes tables"
+
+[node name="BtnMyCharacters" type="Button" parent="CenterContainer" unique_id=357066156]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+text = "Mes personnages"
+
+[node name="BtnSettings" type="Button" parent="CenterContainer" unique_id=1681768712]
+custom_minimum_size = Vector2(400, 50)
+layout_mode = 2
+text = "Paramètres"
