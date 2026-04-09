@@ -22,23 +22,36 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.101960786, 0.101960786, 1)
 
-[node name="NavBar" type="PanelContainer" parent="." unique_id=1464621774]
-custom_minimum_size = Vector2(0, 60)
+[node name="MapArea" type="PanelContainer" parent="." unique_id=1438135924]
+clip_contents = true
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 60.0
+offset_right = -320.0
+offset_bottom = -50.0
 grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=332598262]
+[node name="MapViewportContainer" type="SubViewportContainer" parent="MapArea" unique_id=300636237]
 layout_mode = 2
+stretch = true
+mouse_target = true
 
-[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=119023100]
-layout_mode = 2
-text = "POUSROLES"
+[node name="MapViewport" type="SubViewport" parent="MapArea/MapViewportContainer" unique_id=411634131]
+handle_input_locally = false
+size = Vector2i(1600, 970)
+render_target_update_mode = 4
 
-[node name="TableName" type="Label" parent="NavBar/HBoxContainer" unique_id=2025244487]
-layout_mode = 2
-text = "/ ARIA"
+[node name="MapSprite" type="Sprite2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2089222173]
+
+[node name="Camera" type="Camera2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=446901329]
+script = ExtResource("2_4wq7v")
+
+[node name="GridOverlay" type="Node2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2142895589]
+script = ExtResource("3_kg635")
 
 [node name="ChatPanel" type="PanelContainer" parent="." unique_id=1925823382]
 custom_minimum_size = Vector2(320, 0)
@@ -52,12 +65,21 @@ offset_top = 60.0
 grow_horizontal = 0
 grow_vertical = 2
 
+[node name="ChatBackground" type="ColorRect" parent="ChatPanel" unique_id=719475683]
+layout_mode = 2
+color = Color(0.14509805, 0.14509805, 0.14509805, 1)
+
 [node name="ChatVBox" type="VBoxContainer" parent="ChatPanel" unique_id=315091673]
 layout_mode = 2
 
 [node name="ChatTitle" type="Label" parent="ChatPanel/ChatVBox" unique_id=542219775]
 layout_mode = 2
 text = "Chat"
+
+[node name="ChatLog" type="RichTextLabel" parent="ChatPanel/ChatVBox" unique_id=87475151]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_following = true
 
 [node name="ChatInput" type="PanelContainer" parent="ChatPanel/ChatVBox" unique_id=688927974]
 custom_minimum_size = Vector2(0, 50)
@@ -67,10 +89,28 @@ layout_mode = 2
 layout_mode = 2
 placeholder_text = "Écrire un message ou /roll 2d6+3"
 
-[node name="ChatLog" type="RichTextLabel" parent="ChatPanel/ChatVBox" unique_id=87475151]
+[node name="MapContextMenu" type="PopupMenu" parent="." unique_id=374617785]
+oversampling_override = 1.0
+visible = true
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=1464621774]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 60.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=332598262]
 layout_mode = 2
-size_flags_vertical = 3
-scroll_following = true
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=119023100]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="TableName" type="Label" parent="NavBar/HBoxContainer" unique_id=2025244487]
+layout_mode = 2
+text = "/ ARIA"
 
 [node name="Toolbar" type="PanelContainer" parent="." unique_id=1180458282]
 custom_minimum_size = Vector2(0, 50)
@@ -108,37 +148,3 @@ layout_mode = 2
 [node name="Tool5" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=63527178]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-
-[node name="MapArea" type="PanelContainer" parent="." unique_id=1438135924]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 60.0
-offset_right = -320.0
-offset_bottom = -50.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="MapViewportContainer" type="SubViewportContainer" parent="MapArea" unique_id=300636237]
-layout_mode = 2
-stretch = true
-mouse_target = true
-
-[node name="MapViewport" type="SubViewport" parent="MapArea/MapViewportContainer" unique_id=411634131]
-handle_input_locally = false
-size = Vector2i(1600, 970)
-render_target_update_mode = 4
-
-[node name="MapSprite" type="Sprite2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2089222173]
-
-[node name="Camera" type="Camera2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=446901329]
-script = ExtResource("2_4wq7v")
-
-[node name="GridOverlay" type="Node2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2142895589]
-script = ExtResource("3_kg635")
-
-[node name="MapContextMenu" type="PopupMenu" parent="." unique_id=374617785]
-oversampling_override = 1.0
-visible = true

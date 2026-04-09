@@ -1,3 +1,4 @@
+ColorRect
 RichTextLabel
 LineEdit
 PopupMenu
@@ -8,8 +9,6 @@ SubViewport
 SubViewportContainer
 Label
 PanelContainer
-ColorRect
 HBoxContainer
 VBoxContainer
 Button
-Control

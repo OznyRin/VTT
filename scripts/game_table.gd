@@ -13,6 +13,8 @@ func _ready():
 	# NavBar
 	var nav_style = StyleBoxFlat.new()
 	nav_style.bg_color = Color("#252525")
+	nav_style.border_color = Color("#3A3A3A")
+	nav_style.border_width_bottom = 1
 	$NavBar.add_theme_stylebox_override("panel", nav_style)
 	
 	var home_style = StyleBoxEmpty.new()
@@ -45,7 +47,9 @@ func _ready():
 	
 	# Toolbar
 	var toolbar_style = StyleBoxFlat.new()
-	toolbar_style.bg_color = Color("#252525")
+	toolbar_style.border_color = Color("#3A3A3A")
+	toolbar_style.border_width_top = 1
+	toolbar_style.bg_color = Color("#1A1A1A")
 	$Toolbar.add_theme_stylebox_override("panel", toolbar_style)
 	
 	var tool_style = StyleBoxFlat.new()
@@ -94,6 +98,13 @@ func _ready():
 	$ChatPanel/ChatVBox/ChatLog.add_theme_color_override("default_color", Color("#F0EDE8"))
 	$ChatPanel/ChatVBox/ChatLog.add_theme_font_size_override("normal_font_size", 14)
 	$ChatPanel/ChatVBox/ChatLog.bbcode_enabled = true
+	
+	# Fond du ChatLog
+	var chatlog_style = StyleBoxFlat.new()
+	chatlog_style.bg_color = Color("#2F2F2F")
+	chatlog_style.border_color = Color("#3A3A3A")
+	chatlog_style.border_width_left = 1
+	$ChatPanel/ChatVBox/ChatLog.add_theme_stylebox_override("normal", chatlog_style)
 	
 	# Connecter le chat
 	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.text_submitted.connect(_on_chat_submitted)
