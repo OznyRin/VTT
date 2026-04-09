@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://c6dw0u4v2heqb"]
+
+[ext_resource type="Script" uid="uid://ba1mawmutouwj" path="res://scenes/game_table.gd" id="1_ii77m"]
+
+[node name="GameTable" type="Control" unique_id=1546915686]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ii77m")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1494639548]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=1464621774]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=332598262]
+layout_mode = 2
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=119023100]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="TableName" type="Label" parent="NavBar/HBoxContainer" unique_id=2025244487]
+layout_mode = 2
+text = "/ ARIA"
+
+[node name="ChatPanel" type="PanelContainer" parent="." unique_id=1925823382]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = 60.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ChatVBox" type="VBoxContainer" parent="ChatPanel" unique_id=315091673]
+layout_mode = 2
+
+[node name="ChatTitle" type="Label" parent="ChatPanel/ChatVBox" unique_id=542219775]
+layout_mode = 2
+text = "Chat"
+
+[node name="ChatMessages" type="PanelContainer" parent="ChatPanel/ChatVBox" unique_id=655304493]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ChatInput" type="PanelContainer" parent="ChatPanel/ChatVBox" unique_id=688927974]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="ChatPlaceholder" type="Label" parent="ChatPanel/ChatVBox/ChatInput" unique_id=845584796]
+layout_mode = 2
+text = "Ecrire un message ..."
+
+[node name="Toolbar" type="PanelContainer" parent="." unique_id=1180458282]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = -320.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ToolsHBox" type="HBoxContainer" parent="Toolbar" unique_id=260055219]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Tool1" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=1060015326]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Tool2" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=1199911935]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Tool3" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=1472923843]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Tool4" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=632859449]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="Tool5" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=63527178]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+
+[node name="MapArea" type="PanelContainer" parent="." unique_id=1438135924]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 60.0
+offset_right = -320.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MapPlaceholder" type="Label" parent="MapArea" unique_id=1985208819]
+layout_mode = 2
+text = "ZONE DE CARTE"
+horizontal_alignment = 1
+vertical_alignment = 1
