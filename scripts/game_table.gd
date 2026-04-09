@@ -7,6 +7,7 @@ var is_panning := false
 var right_click_world_pos := Vector2.ZERO
 var token_scene := preload("res://scripts/token.gd")
 var token_count := 0
+var right_click_token = null
 
 func _ready():
 	# NavBar
@@ -94,6 +95,23 @@ func _input(event):
 		var mouse_pos = event.position
 		var viewport_size = viewport.get_visible_rect().size
 		right_click_world_pos = camera.get_screen_center_position() + (mouse_pos - viewport_size / 2) / camera.zoom
+		
+		# Détecter si un token est sous la souris
+		right_click_token = null
+		for child in viewport.get_children():
+			if child is Sprite2D and child.texture and child.name.begins_with("Token"):
+				if right_click_world_pos.distance_to(child.position) < 35:
+					right_click_token = child
+					break
+		
+		# Construire le menu selon le contexte
+		$MapContextMenu.clear()
+		if right_click_token:
+			$MapContextMenu.add_item("Supprimer le token", 1)
+			$MapContextMenu.add_item("Changer la couleur", 2)
+		else:
+			$MapContextMenu.add_item("Ajouter un token", 0)
+		
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
 	
@@ -117,6 +135,13 @@ func _input(event):
 func _on_context_menu_pressed(id):
 	if id == 0:
 		spawn_token(right_click_world_pos)
+	elif id == 1:
+		if right_click_token:
+			right_click_token.queue_free()
+			right_click_token = null
+	elif id == 2:
+		if right_click_token:
+			change_token_color(right_click_token)
 
 func spawn_token(world_pos):
 	token_count += 1
@@ -134,3 +159,31 @@ func spawn_token(world_pos):
 	token.position = snapped + grid_origin
 	
 	$MapArea/MapViewportContainer/MapViewport.add_child(token)
+
+func change_token_color(token):
+	var colors = [
+		Color("#F5A623"),  # orange
+		Color("#4CAF50"),  # vert
+		Color("#D94444"),  # rouge
+		Color("#4A90D9"),  # bleu
+		Color("#9B59B6"),  # violet
+		Color("#F0EDE8"),  # blanc
+	]
+	
+	# Trouver la couleur actuelle et passer à la suivante
+	var img = token.texture.get_image()
+	var current_color = img.get_pixel(30, 30)
+	var next_index = 0
+	for i in range(colors.size()):
+		if current_color.is_equal_approx(colors[i]):
+			next_index = (i + 1) % colors.size()
+			break
+	
+	var new_img = Image.create(60, 60, false, Image.FORMAT_RGBA8)
+	new_img.fill(colors[next_index])
+	var center = Vector2(30, 30)
+	for x in range(60):
+		for y in range(60):
+			if Vector2(x, y).distance_to(center) > 28:
+				new_img.set_pixel(x, y, Color(0, 0, 0, 0))
+	token.texture = ImageTexture.create_from_image(new_img)
