@@ -51,6 +51,14 @@ func _ready():
 	
 	# Navigation retour
 	$NavBar/HBoxContainer/BtnHome.pressed.connect(_on_home_pressed)
+	
+	# Rendre les cartes cliquables
+	$Content/VBox/CardsGrid/Card1.gui_input.connect(_on_card_clicked)
+	$Content/VBox/CardsGrid/Card2.gui_input.connect(_on_card_clicked)
+
+func _on_card_clicked(event):
+	if event is InputEventMouseButton and event.pressed:
+		get_tree().change_scene_to_file("res://scenes/game_table.tscn")
 
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

@@ -1,2 +1,4 @@
 res://scenes/game_table.tscn
 res://scenes/game_table.gd
+res://scenes/my_tables.tscn
+res://scenes/my_tables.gd
