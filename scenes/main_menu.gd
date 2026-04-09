@@ -43,6 +43,23 @@ func _ready():
 		btn.add_theme_color_override("font_hover_color", Color("#F5A623"))
 	
 	$CenterContainer/BtnMyTables.pressed.connect(_on_my_tables_pressed)
+	
+	$CenterContainer/BtnCreate.pressed.connect(_on_create_pressed)
+	$CenterContainer/BtnJoin.pressed.connect(_on_join_pressed)
+	$CenterContainer/BtnMyCharacters.pressed.connect(_on_characters_pressed)
+	$CenterContainer/BtnSettings.pressed.connect(_on_settings_pressed)
+
+func _on_create_pressed():
+	get_tree().change_scene_to_file("res://scenes/create_table.tscn")
+
+func _on_join_pressed():
+	get_tree().change_scene_to_file("res://scenes/join_table.tscn")
+
+func _on_characters_pressed():
+	get_tree().change_scene_to_file("res://scenes/my_characters.tscn")
+
+func _on_settings_pressed():
+	get_tree().change_scene_to_file("res://scenes/settings.tscn")
 
 func _on_my_tables_pressed():
 	get_tree().change_scene_to_file("res://scenes/my_tables.tscn")

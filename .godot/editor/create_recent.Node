@@ -1,8 +1,8 @@
 Label
 PanelContainer
+ColorRect
 HBoxContainer
 VBoxContainer
 Button
-ColorRect
 Control
 MarginContainer

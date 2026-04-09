@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://yevbxq4ngel6"]
+
+[ext_resource type="Script" uid="uid://by73k033nu01w" path="res://scenes/create_table.gd" id="1_771ut"]
+
+[node name="CreateTable" type="Control" unique_id=1164363430]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_771ut")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=761682725]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=93353949]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=1085173518]
+layout_mode = 2
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=1513299624]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="NavTitle" type="Label" parent="NavBar/HBoxContainer" unique_id=1476023686]
+layout_mode = 2
+text = "/ Créer une table"
+
+[node name="PageTitle" type="Label" parent="." unique_id=243188061]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -11.5
+offset_right = 128.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9411765, 0.92941177, 0.9098039, 1)
+text = "Créer une table (en construction)"

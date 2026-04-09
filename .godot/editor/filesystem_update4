@@ -2,3 +2,13 @@ res://scenes/game_table.tscn
 res://scenes/game_table.gd
 res://scenes/my_tables.tscn
 res://scenes/my_tables.gd
+res://scenes/create_table.tscn
+res://scenes/create_table.gd
+res://scenes/join_table.tscn
+res://scenes/join_table.gd
+res://scenes/my_characters.tscn
+res://scenes/my_characters.gd
+res://scenes/settings.tscn
+res://scenes/settings.gd
+res://scenes/main_menu.tscn
+res://scenes/main_menu.gd
