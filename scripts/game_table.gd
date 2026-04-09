@@ -64,6 +64,10 @@ func _ready():
 	var map_texture = load("res://assets/map.jpg")
 	$MapArea/MapViewportContainer/MapViewport/MapSprite.texture = map_texture
 	
+	# Centrer la grille sur la map
+	var map_size = map_texture.get_size()
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.position = -map_size / 2
+	
 	# Navigation
 	$NavBar/HBoxContainer/BtnHome.pressed.connect(_on_home_pressed)
 
