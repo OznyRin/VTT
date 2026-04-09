@@ -137,3 +137,7 @@ script = ExtResource("2_4wq7v")
 
 [node name="GridOverlay" type="Node2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2142895589]
 script = ExtResource("3_kg635")
+
+[node name="MapContextMenu" type="PopupMenu" parent="." unique_id=374617785]
+oversampling_override = 1.0
+visible = true
