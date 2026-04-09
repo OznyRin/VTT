@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ba1mawmutouwj" path="res://scripts/game_table.gd" id="1_ii77m"]
 [ext_resource type="Script" uid="uid://dpiotu24p3jdg" path="res://scripts/map_camera.gd" id="2_4wq7v"]
 [ext_resource type="Script" uid="uid://c8brmq4krseol" path="res://scripts/grid_overlay.gd" id="3_kg635"]
+[ext_resource type="Script" uid="uid://b4t6j6ro8mpap" path="res://scripts/fog_of_war.gd" id="4_oxme1"]
 
 [node name="GameTable" type="Control" unique_id=1546915686]
 layout_mode = 3
@@ -52,6 +53,9 @@ script = ExtResource("2_4wq7v")
 
 [node name="GridOverlay" type="Node2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2142895589]
 script = ExtResource("3_kg635")
+
+[node name="FogOfWar" type="Node2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=1963118712]
+script = ExtResource("4_oxme1")
 
 [node name="ChatPanel" type="PanelContainer" parent="." unique_id=1925823382]
 custom_minimum_size = Vector2(320, 0)

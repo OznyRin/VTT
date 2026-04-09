@@ -8,6 +8,7 @@ var right_click_world_pos := Vector2.ZERO
 var token_scene := preload("res://scripts/token.gd")
 var token_count := 0
 var right_click_token = null
+var fog_mode := false
 
 func _ready():
 	# NavBar
@@ -31,6 +32,8 @@ func _ready():
 	# Chat Panel
 	var chat_style = StyleBoxFlat.new()
 	chat_style.bg_color = Color("#252525")
+	chat_style.border_color = Color("#3A3A3A")
+	chat_style.border_width_left = 1
 	$ChatPanel.add_theme_stylebox_override("panel", chat_style)
 	
 	$ChatPanel/ChatVBox/ChatTitle.add_theme_color_override("font_color", Color("#F0EDE8"))
@@ -47,9 +50,9 @@ func _ready():
 	
 	# Toolbar
 	var toolbar_style = StyleBoxFlat.new()
+	toolbar_style.bg_color = Color("#1A1A1A")
 	toolbar_style.border_color = Color("#3A3A3A")
 	toolbar_style.border_width_top = 1
-	toolbar_style.bg_color = Color("#1A1A1A")
 	$Toolbar.add_theme_stylebox_override("panel", toolbar_style)
 	
 	var tool_style = StyleBoxFlat.new()
@@ -73,6 +76,9 @@ func _ready():
 	# Centrer la grille sur la map
 	var map_size = map_texture.get_size()
 	$MapArea/MapViewportContainer/MapViewport/GridOverlay.position = -map_size / 2
+	
+	# Positionner le fog of war comme la grille
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.position = -map_size / 2
 	
 	# Navigation
 	$NavBar/HBoxContainer/BtnHome.pressed.connect(_on_home_pressed)
@@ -113,6 +119,19 @@ func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _input(event):
+	# Fog of War - clic gauche pour révéler/masquer
+	if fog_mode and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var cam = $MapArea/MapViewportContainer/MapViewport/Camera
+		var vp = $MapArea/MapViewportContainer/MapViewport
+		var mpos = event.position
+		var vp_size = vp.get_visible_rect().size
+		var wpos = cam.get_screen_center_position() + (mpos - vp_size / 2) / cam.zoom
+		if event.shift_pressed:
+			$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_cell(wpos)
+		else:
+			$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_cell(wpos)
+		return
+	
 	# Clic droit menu contextuel
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		var camera = $MapArea/MapViewportContainer/MapViewport/Camera
@@ -136,6 +155,12 @@ func _input(event):
 			$MapContextMenu.add_item("Changer la couleur", 2)
 		else:
 			$MapContextMenu.add_item("Ajouter un token", 0)
+			if fog_mode:
+				$MapContextMenu.add_item("Désactiver Fog of War", 4)
+			else:
+				$MapContextMenu.add_item("Activer Fog of War", 3)
+			$MapContextMenu.add_item("Tout révéler", 5)
+			$MapContextMenu.add_item("Tout masquer", 6)
 		
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
@@ -167,6 +192,18 @@ func _on_context_menu_pressed(id):
 	elif id == 2:
 		if right_click_token:
 			change_token_color(right_click_token)
+	elif id == 3:
+		fog_mode = true
+		add_chat_message("Système", "Fog of War activé — Clic gauche pour révéler, Shift+Clic pour masquer")
+	elif id == 4:
+		fog_mode = false
+		add_chat_message("Système", "Fog of War désactivé")
+	elif id == 5:
+		$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_all()
+		add_chat_message("Système", "Toute la carte est révélée")
+	elif id == 6:
+		$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
+		add_chat_message("Système", "Toute la carte est masquée")
 
 func spawn_token(world_pos):
 	token_count += 1
@@ -195,7 +232,6 @@ func change_token_color(token):
 		Color("#F0EDE8"),  # blanc
 	]
 	
-	# Trouver la couleur actuelle et passer à la suivante
 	var img = token.texture.get_image()
 	var current_color = img.get_pixel(30, 30)
 	var next_index = 0
@@ -247,12 +283,10 @@ func roll_dice(formula):
 func parse_dice_formula(formula: String) -> Dictionary:
 	formula = formula.strip_edges().to_lower()
 	
-	# Trouver le 'd'
 	var d_pos = formula.find("d")
 	if d_pos == -1:
 		return {"error": "Formule invalide. Utilisez le format XdY+Z (ex: 2d6+3)"}
 	
-	# Nombre de dés
 	var num_dice_str = formula.substr(0, d_pos)
 	var num_dice = 1
 	if num_dice_str != "":
@@ -261,7 +295,6 @@ func parse_dice_formula(formula: String) -> Dictionary:
 		else:
 			return {"error": "Nombre de dés invalide"}
 	
-	# Trouver le modificateur
 	var after_d = formula.substr(d_pos + 1)
 	var modifier = 0
 	var faces_str = after_d
@@ -288,13 +321,11 @@ func parse_dice_formula(formula: String) -> Dictionary:
 	
 	var faces = int(faces_str)
 	
-	# Validation
 	if num_dice < 1 or num_dice > 100:
 		return {"error": "Nombre de dés entre 1 et 100"}
 	if faces < 2 or faces > 1000:
 		return {"error": "Nombre de faces entre 2 et 1000"}
 	
-	# Lancer les dés
 	var rolls = []
 	var total = 0
 	for i in range(num_dice):

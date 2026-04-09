@@ -1,9 +1,9 @@
+Node2D
 ColorRect
 RichTextLabel
 LineEdit
 PopupMenu
 Sprite2D
-Node2D
 Camera2D
 SubViewport
 SubViewportContainer
