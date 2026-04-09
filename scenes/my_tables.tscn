@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://fo0w5k7fqd30"]
 
-[ext_resource type="Script" uid="uid://csib23sel2cyh" path="res://scenes/my_tables.gd" id="1_hf267"]
+[ext_resource type="Script" uid="uid://csib23sel2cyh" path="res://scripts/my_tables.gd" id="1_hf267"]
 
 [node name="MyTables" type="Control" unique_id=146740709]
 layout_mode = 3

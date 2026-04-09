@@ -1,3 +1,7 @@
+Sprite2D
+Camera2D
+SubViewport
+SubViewportContainer
 Label
 PanelContainer
 ColorRect

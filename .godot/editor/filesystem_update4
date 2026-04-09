@@ -12,3 +12,5 @@ res://scenes/settings.tscn
 res://scenes/settings.gd
 res://scenes/main_menu.tscn
 res://scenes/main_menu.gd
+res://scenes/map_camera.gd
+res://scripts/game_table.gd

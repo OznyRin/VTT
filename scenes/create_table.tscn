@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://yevbxq4ngel6"]
 
-[ext_resource type="Script" uid="uid://by73k033nu01w" path="res://scenes/create_table.gd" id="1_771ut"]
+[ext_resource type="Script" uid="uid://by73k033nu01w" path="res://scripts/create_table.gd" id="1_771ut"]
 
 [node name="CreateTable" type="Control" unique_id=1164363430]
 layout_mode = 3

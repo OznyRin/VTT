@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlmthaplgmhjx"]
 
-[ext_resource type="Script" uid="uid://b028brxn060t0" path="res://scenes/join_table.gd" id="1_6wlu5"]
+[ext_resource type="Script" uid="uid://b028brxn060t0" path="res://scripts/join_table.gd" id="1_6wlu5"]
 
 [node name="JoinTable" type="Control" unique_id=64949569]
 layout_mode = 3

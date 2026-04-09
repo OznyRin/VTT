@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c6dw0u4v2heqb"]
 
-[ext_resource type="Script" uid="uid://ba1mawmutouwj" path="res://scenes/game_table.gd" id="1_ii77m"]
+[ext_resource type="Script" uid="uid://ba1mawmutouwj" path="res://scripts/game_table.gd" id="1_ii77m"]
+[ext_resource type="Script" uid="uid://dpiotu24p3jdg" path="res://scripts/map_camera.gd" id="2_4wq7v"]
 
 [node name="GameTable" type="Control" unique_id=1546915686]
 layout_mode = 3
@@ -118,8 +119,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MapPlaceholder" type="Label" parent="MapArea" unique_id=1985208819]
+[node name="MapViewportContainer" type="SubViewportContainer" parent="MapArea" unique_id=300636237]
 layout_mode = 2
-text = "ZONE DE CARTE"
-horizontal_alignment = 1
-vertical_alignment = 1
+stretch = true
+mouse_target = true
+
+[node name="MapViewport" type="SubViewport" parent="MapArea/MapViewportContainer" unique_id=411634131]
+handle_input_locally = false
+size = Vector2i(1600, 970)
+render_target_update_mode = 4
+
+[node name="MapSprite" type="Sprite2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=2089222173]
+
+[node name="Camera" type="Camera2D" parent="MapArea/MapViewportContainer/MapViewport" unique_id=446901329]
+script = ExtResource("2_4wq7v")
