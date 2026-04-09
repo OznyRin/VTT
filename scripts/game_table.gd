@@ -34,10 +34,6 @@ func _ready():
 	$ChatPanel/ChatVBox/ChatTitle.add_theme_color_override("font_color", Color("#F0EDE8"))
 	$ChatPanel/ChatVBox/ChatTitle.add_theme_font_size_override("font_size", 18)
 	
-	var msg_style = StyleBoxFlat.new()
-	msg_style.bg_color = Color("#2F2F2F")
-	$ChatPanel/ChatVBox/ChatMessages.add_theme_stylebox_override("panel", msg_style)
-	
 	var input_style = StyleBoxFlat.new()
 	input_style.bg_color = Color("#383838")
 	input_style.border_color = Color("#4A4A4A")
@@ -46,9 +42,6 @@ func _ready():
 	input_style.border_width_left = 1
 	input_style.border_width_right = 1
 	$ChatPanel/ChatVBox/ChatInput.add_theme_stylebox_override("panel", input_style)
-	
-	$ChatPanel/ChatVBox/ChatInput/ChatPlaceholder.add_theme_color_override("font_color", Color("#8A8680"))
-	$ChatPanel/ChatVBox/ChatInput/ChatPlaceholder.add_theme_font_size_override("font_size", 14)
 	
 	# Toolbar
 	var toolbar_style = StyleBoxFlat.new()
@@ -83,6 +76,27 @@ func _ready():
 	# Menu contextuel
 	$MapContextMenu.add_item("Ajouter un token", 0)
 	$MapContextMenu.id_pressed.connect(_on_context_menu_pressed)
+	
+	# Style Chat Input
+	var input_stylebox = StyleBoxFlat.new()
+	input_stylebox.bg_color = Color("#383838")
+	input_stylebox.border_color = Color("#4A4A4A")
+	input_stylebox.border_width_top = 1
+	input_stylebox.border_width_bottom = 1
+	input_stylebox.border_width_left = 1
+	input_stylebox.border_width_right = 1
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.add_theme_stylebox_override("normal", input_stylebox)
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.add_theme_color_override("font_color", Color("#F0EDE8"))
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.add_theme_color_override("font_placeholder_color", Color("#8A8680"))
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.add_theme_font_size_override("font_size", 14)
+	
+	# Style Chat Log
+	$ChatPanel/ChatVBox/ChatLog.add_theme_color_override("default_color", Color("#F0EDE8"))
+	$ChatPanel/ChatVBox/ChatLog.add_theme_font_size_override("normal_font_size", 14)
+	$ChatPanel/ChatVBox/ChatLog.bbcode_enabled = true
+	
+	# Connecter le chat
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.text_submitted.connect(_on_chat_submitted)
 
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
@@ -187,3 +201,95 @@ func change_token_color(token):
 			if Vector2(x, y).distance_to(center) > 28:
 				new_img.set_pixel(x, y, Color(0, 0, 0, 0))
 	token.texture = ImageTexture.create_from_image(new_img)
+
+func _on_chat_submitted(text):
+	if text.strip_edges() == "":
+		return
+	
+	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.text = ""
+	
+	if text.begins_with("/roll ") or text.begins_with("/r "):
+		var formula = text.split(" ", true, 1)[1]
+		roll_dice(formula)
+	else:
+		add_chat_message("Vous", text)
+
+func add_chat_message(sender, text):
+	$ChatPanel/ChatVBox/ChatLog.append_text("[color=#F5A623]" + sender + ":[/color] " + text + "\n")
+
+func roll_dice(formula):
+	var result = parse_dice_formula(formula)
+	if result.has("error"):
+		add_chat_message("Système", "[color=#D94444]" + result["error"] + "[/color]")
+	else:
+		var detail = formula + " = "
+		var parts = []
+		for roll in result["rolls"]:
+			parts.append("[color=#F5A623]" + str(roll) + "[/color]")
+		detail += "[" + ", ".join(parts) + "]"
+		if result["modifier"] != 0:
+			var mod_sign = "+" if result["modifier"] > 0 else ""
+			detail += " " + mod_sign + str(result["modifier"])
+		detail += " = [color=#F5A623][b]" + str(result["total"]) + "[/b][/color]"
+		add_chat_message("Dés", detail)
+
+func parse_dice_formula(formula: String) -> Dictionary:
+	formula = formula.strip_edges().to_lower()
+	
+	# Trouver le 'd'
+	var d_pos = formula.find("d")
+	if d_pos == -1:
+		return {"error": "Formule invalide. Utilisez le format XdY+Z (ex: 2d6+3)"}
+	
+	# Nombre de dés
+	var num_dice_str = formula.substr(0, d_pos)
+	var num_dice = 1
+	if num_dice_str != "":
+		if num_dice_str.is_valid_int():
+			num_dice = int(num_dice_str)
+		else:
+			return {"error": "Nombre de dés invalide"}
+	
+	# Trouver le modificateur
+	var after_d = formula.substr(d_pos + 1)
+	var modifier = 0
+	var faces_str = after_d
+	
+	var plus_pos = after_d.find("+")
+	var minus_pos = after_d.find("-")
+	var mod_pos = -1
+	
+	if plus_pos != -1 and (minus_pos == -1 or plus_pos < minus_pos):
+		mod_pos = plus_pos
+	elif minus_pos != -1:
+		mod_pos = minus_pos
+	
+	if mod_pos != -1:
+		faces_str = after_d.substr(0, mod_pos)
+		var mod_str = after_d.substr(mod_pos)
+		if mod_str.is_valid_int():
+			modifier = int(mod_str)
+		else:
+			return {"error": "Modificateur invalide"}
+	
+	if not faces_str.is_valid_int():
+		return {"error": "Nombre de faces invalide"}
+	
+	var faces = int(faces_str)
+	
+	# Validation
+	if num_dice < 1 or num_dice > 100:
+		return {"error": "Nombre de dés entre 1 et 100"}
+	if faces < 2 or faces > 1000:
+		return {"error": "Nombre de faces entre 2 et 1000"}
+	
+	# Lancer les dés
+	var rolls = []
+	var total = 0
+	for i in range(num_dice):
+		var roll = randi_range(1, faces)
+		rolls.append(roll)
+		total += roll
+	total += modifier
+	
+	return {"rolls": rolls, "total": total, "modifier": modifier}

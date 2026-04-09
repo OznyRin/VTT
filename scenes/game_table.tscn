@@ -59,17 +59,18 @@ layout_mode = 2
 layout_mode = 2
 text = "Chat"
 
-[node name="ChatMessages" type="PanelContainer" parent="ChatPanel/ChatVBox" unique_id=655304493]
-layout_mode = 2
-size_flags_vertical = 3
-
 [node name="ChatInput" type="PanelContainer" parent="ChatPanel/ChatVBox" unique_id=688927974]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="ChatPlaceholder" type="Label" parent="ChatPanel/ChatVBox/ChatInput" unique_id=845584796]
+[node name="ChatLineEdit" type="LineEdit" parent="ChatPanel/ChatVBox/ChatInput" unique_id=65455686]
 layout_mode = 2
-text = "Ecrire un message ..."
+placeholder_text = "Écrire un message ou /roll 2d6+3"
+
+[node name="ChatLog" type="RichTextLabel" parent="ChatPanel/ChatVBox" unique_id=87475151]
+layout_mode = 2
+size_flags_vertical = 3
+scroll_following = true
 
 [node name="Toolbar" type="PanelContainer" parent="." unique_id=1180458282]
 custom_minimum_size = Vector2(0, 50)

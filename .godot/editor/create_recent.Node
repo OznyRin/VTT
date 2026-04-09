@@ -1,3 +1,5 @@
+RichTextLabel
+LineEdit
 PopupMenu
 Sprite2D
 Node2D
@@ -11,4 +13,3 @@ HBoxContainer
 VBoxContainer
 Button
 Control
-MarginContainer
