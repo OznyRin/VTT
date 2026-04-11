@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://cr1aci8ad6tid"]
+
+[ext_resource type="Script" uid="uid://dogmof1nijjwn" path="res://scripts/character_list.gd" id="1_qe4qq"]
+
+[node name="CharacterList" type="Control" unique_id=623591864]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qe4qq")
+
+[node name="Background" type="ColorRect" parent="." unique_id=566740364]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=100548589]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=1236885269]
+layout_mode = 2
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=977219513]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="NavTitle" type="Label" parent="NavBar/HBoxContainer" unique_id=1993172993]
+layout_mode = 2
+text = "/ Mes personnages"
+
+[node name="Content" type="MarginContainer" parent="." unique_id=1384728807]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 80
+
+[node name="VBox" type="VBoxContainer" parent="Content" unique_id=732204914]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="HBoxContainer" parent="Content/VBox" unique_id=1773193393]
+layout_mode = 2
+
+[node name="PageTitle" type="Label" parent="Content/VBox/Header" unique_id=687716083]
+layout_mode = 2
+text = "Mes personnages"
+vertical_alignment = 1
+
+[node name="BtnNew" type="Button" parent="Content/VBox/Header" unique_id=509786289]
+layout_mode = 2
+text = "+ Nouveau personnage"
+
+[node name="Charlist" type="VBoxContainer" parent="Content/VBox/Header" unique_id=365034850]
+layout_mode = 2
+theme_override_constants/separation = 12

@@ -56,7 +56,7 @@ func _on_join_pressed():
 	get_tree().change_scene_to_file("res://scenes/join_table.tscn")
 
 func _on_characters_pressed():
-	get_tree().change_scene_to_file("res://scenes/character_sheet.tscn")
+	get_tree().change_scene_to_file("res://scenes/character_list.tscn")
 
 func _on_settings_pressed():
 	get_tree().change_scene_to_file("res://scenes/settings.tscn")

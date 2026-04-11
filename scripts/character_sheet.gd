@@ -3,6 +3,9 @@ extends Control
 var stat_names := ["For", "Dex", "Con", "Int", "Sag", "Cha"]
 
 func _ready():
+	# Charger un personnage existant si demandé
+	if Global.current_character_file != "":
+		_load_character(Global.current_character_file)
 	# NavBar
 	var nav_style = StyleBoxFlat.new()
 	nav_style.bg_color = Color("#252525")
@@ -146,7 +149,7 @@ func _ready():
 	$Content/VBox/SaveRow/BtnLoad.pressed.connect(_on_load)
 	
 func _on_home_pressed():
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	get_tree().change_scene_to_file("res://scenes/character_list.tscn")
 
 func _on_stat_changed(value, stat):
 	_update_modifier(stat, value)
@@ -262,3 +265,26 @@ func _on_load():
 		_update_modifier(stat, data["stats"][stat])
 	
 	$Content/VBox/SaveRow/SaveStatus.text = "Chargé : " + data["name"]
+	
+func _load_character(file_name):
+	var file = FileAccess.open("user://saves/" + file_name, FileAccess.READ)
+	if not file:
+		return
+	var json_text = file.get_as_text()
+	file.close()
+	
+	var json = JSON.new()
+	if json.parse(json_text) != OK:
+		return
+	
+	var data = json.data
+	$Content/VBox/IdentityRow/NameGroup/NameEdit.text = data["name"]
+	$Content/VBox/IdentityRow/ClassGroup/ClassEdit.text = data["class"]
+	$Content/VBox/IdentityRow/LevelGroup/LevelSpin.value = data["level"]
+	$Content/VBox/HPRow/HPGroup/HPInputs/HPCurrent.value = data["hp_current"]
+	$Content/VBox/HPRow/HPGroup/HPInputs/HPMax.value = data["hp_max"]
+	$Content/VBox/NotesEdit.text = data["notes"]
+	
+	for stat in stat_names:
+		$Content/VBox/StatsGrid.get_node("Stat" + stat).value = data["stats"][stat]
+		_update_modifier(stat, data["stats"][stat])
