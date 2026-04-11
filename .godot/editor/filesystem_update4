@@ -1,3 +1,7 @@
 res://scenes/character_sheet.tscn
 res://scripts/character_sheet.gd
 res://scripts/main_menu.gd
+res://scenes/create_table.tscn
+res://scripts/create_table.gd
+res://scenes/join_table.tscn
+res://scripts/join_table.gd
