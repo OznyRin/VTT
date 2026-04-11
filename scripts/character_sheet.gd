@@ -140,8 +140,23 @@ func _on_roll_stat(stat):
 	var total = roll + mod
 	var mod_text = "+" + str(mod) if mod >= 0 else str(mod)
 	
-	var result_text = stat + " : 1d20(" + str(roll) + ") " + mod_text + " = " + str(total)
-	print(result_text)
+	var full_names = {
+		"For": "Force", "Dex": "Dextérité", "Con": "Constitution",
+		"Int": "Intelligence", "Sag": "Sagesse", "Cha": "Charisme"
+	}
+	
+	var result = full_names[stat] + " : 1d20(" + str(roll) + ") " + mod_text + " = " + str(total)
+	$Content/VBox/RollResult.text = result
+	$Content/VBox/RollResult.add_theme_font_size_override("font_size", 20)
+	
+	if roll == 20:
+		$Content/VBox/RollResult.add_theme_color_override("font_color", Color("#4CAF50"))
+		$Content/VBox/RollResult.text += "  — Critique !"
+	elif roll == 1:
+		$Content/VBox/RollResult.add_theme_color_override("font_color", Color("#D94444"))
+		$Content/VBox/RollResult.text += "  — Échec critique !"
+	else:
+		$Content/VBox/RollResult.add_theme_color_override("font_color", Color("#F5A623"))
 
 func get_all_children(node):
 	var children = []

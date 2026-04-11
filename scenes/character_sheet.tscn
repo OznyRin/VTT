@@ -215,6 +215,9 @@ text = "+0"
 layout_mode = 2
 text = "Lancer"
 
+[node name="RollResult" type="Label" parent="Content/VBox" unique_id=1726973396]
+layout_mode = 2
+
 [node name="NotesLabel" type="Label" parent="Content/VBox" unique_id=796500029]
 layout_mode = 2
 theme_override_constants/line_spacing = 6

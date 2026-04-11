@@ -1,5 +1,5 @@
-TextEdit
 Label
+TextEdit
 Button
 SpinBox
 GridContainer
@@ -12,4 +12,3 @@ Node2D
 RichTextLabel
 PopupMenu
 Sprite2D
-Camera2D
