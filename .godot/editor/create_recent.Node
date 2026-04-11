@@ -1,9 +1,10 @@
+LineEdit
+AcceptDialog
 FileDialog
 Label
 Button
 SpinBox
 HBoxContainer
-LineEdit
 VBoxContainer
 TextEdit
 GridContainer
@@ -11,5 +12,3 @@ ScrollContainer
 ColorRect
 Node2D
 RichTextLabel
-PopupMenu
-Sprite2D

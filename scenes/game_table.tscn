@@ -158,3 +158,12 @@ title = "Choisir une image"
 size = Vector2i(800, 600)
 file_mode = 0
 access = 2
+
+[node name="TokenNameDialog" type="AcceptDialog" parent="." unique_id=1836657177]
+title = "Nom du token"
+size = Vector2i(400, 150)
+
+[node name="TokenNameEdit" type="LineEdit" parent="TokenNameDialog" unique_id=217213813]
+offset_right = 68.5
+offset_bottom = 31.0
+placeholder_text = "Entrez un nom..."

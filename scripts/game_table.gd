@@ -117,7 +117,9 @@ func _ready():
 	
 	# FileDialog pour la map
 	$MapFileDialog.file_selected.connect(_on_map_file_selected)
-
+	
+	# Dialog nom de token
+	$TokenNameDialog.confirmed.connect(_on_token_name_confirmed)
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
@@ -192,7 +194,8 @@ func _input(event):
 
 func _on_context_menu_pressed(id):
 	if id == 0:
-		spawn_token(right_click_world_pos)
+		$TokenNameDialog/TokenNameEdit.text = ""
+		$TokenNameDialog.popup_centered()
 	elif id == 1:
 		if right_click_token:
 			var token_name = right_click_token.name
@@ -228,19 +231,19 @@ func _sync_delete_token(token_name):
 	if token:
 		token.queue_free()
 
-func spawn_token(world_pos):
+func spawn_token(world_pos, display_name := "Sans nom"):
 	token_count += 1
 	var token_name = "Token" + str(multiplayer.get_unique_id()) + "_" + str(token_count)
-	_do_spawn_token(token_name, world_pos)
+	_do_spawn_token(token_name, world_pos, display_name)
 	
 	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
-		_sync_spawn_token.rpc(token_name, world_pos)
+		_sync_spawn_token.rpc(token_name, world_pos, display_name)
 
 @rpc("any_peer", "call_remote", "reliable")
-func _sync_spawn_token(token_name, world_pos):
-	_do_spawn_token(token_name, world_pos)
+func _sync_spawn_token(token_name, world_pos, display_name):
+	_do_spawn_token(token_name, world_pos, display_name)
 
-func _do_spawn_token(token_name, world_pos):
+func _do_spawn_token(token_name, world_pos, display_name):
 	var token = Sprite2D.new()
 	token.name = token_name
 	token.set_script(token_scene)
@@ -255,6 +258,17 @@ func _do_spawn_token(token_name, world_pos):
 	token.position = snapped + grid_origin
 	
 	$MapArea/MapViewportContainer/MapViewport.add_child(token)
+	
+	# Ajouter le label du nom
+	var label = Label.new()
+	label.name = "NameLabel"
+	label.text = display_name
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.position = Vector2(-40, 30)
+	label.add_theme_color_override("font_color", Color("#F0EDE8"))
+	label.add_theme_font_size_override("font_size", 12)
+	label.custom_minimum_size = Vector2(80, 0)
+	token.add_child(label)
 
 func change_token_color(token):
 	var colors = [
@@ -437,3 +451,9 @@ func _sync_map_change(img_data):
 	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
 	
 	add_chat_message("Système", "Nouvelle carte chargée par le MJ")
+
+func _on_token_name_confirmed():
+	var token_name_text = $TokenNameDialog/TokenNameEdit.text.strip_edges()
+	if token_name_text == "":
+		token_name_text = "Sans nom"
+	spawn_token(right_click_world_pos, token_name_text)
