@@ -4,6 +4,9 @@ var is_dragging := false
 var cell_size := 70
 var drag_offset := Vector2.ZERO
 
+func update_cell_size(new_size):
+	cell_size = new_size
+
 func _ready():
 	var img = Image.create(60, 60, false, Image.FORMAT_RGBA8)
 	img.fill(Color("#F5A623"))

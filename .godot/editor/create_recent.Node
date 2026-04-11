@@ -1,9 +1,9 @@
-LineEdit
+SpinBox
 AcceptDialog
+LineEdit
 FileDialog
 Label
 Button
-SpinBox
 HBoxContainer
 VBoxContainer
 TextEdit

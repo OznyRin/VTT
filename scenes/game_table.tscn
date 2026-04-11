@@ -167,3 +167,11 @@ size = Vector2i(400, 150)
 offset_right = 68.5
 offset_bottom = 31.0
 placeholder_text = "Entrez un nom..."
+
+[node name="GridSizeDialog" type="AcceptDialog" parent="." unique_id=2065166694]
+title = "Taille de la grille"
+size = Vector2i(400, 150)
+
+[node name="GridSizeSpin" type="SpinBox" parent="GridSizeDialog" unique_id=629389783]
+offset_right = 86.5
+offset_bottom = 31.0

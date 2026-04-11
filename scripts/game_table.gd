@@ -9,6 +9,7 @@ var token_scene := preload("res://scripts/token.gd")
 var token_count := 0
 var right_click_token = null
 var fog_mode := false
+var current_cell_size := 70
 
 func _ready():
 	# NavBar
@@ -120,6 +121,13 @@ func _ready():
 	
 	# Dialog nom de token
 	$TokenNameDialog.confirmed.connect(_on_token_name_confirmed)
+	
+	# Dialog taille de grille
+	$GridSizeDialog/GridSizeSpin.min_value = 20
+	$GridSizeDialog/GridSizeSpin.max_value = 200
+	$GridSizeDialog/GridSizeSpin.value = 70
+	$GridSizeDialog.confirmed.connect(_on_grid_size_confirmed)
+	
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
@@ -171,7 +179,8 @@ func _input(event):
 			$MapContextMenu.add_item("Tout révéler", 5)
 			$MapContextMenu.add_item("Tout masquer", 6)
 			$MapContextMenu.add_item("Changer la carte", 7)
-		
+			$MapContextMenu.add_item("Taille de la grille", 8)
+			
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
 	
@@ -224,7 +233,9 @@ func _on_context_menu_pressed(id):
 			_sync_fog_cover_all.rpc()
 	elif id == 7:
 		$MapFileDialog.popup_centered()
-
+	elif id == 8:
+		$GridSizeDialog.popup_centered()
+		
 @rpc("any_peer", "call_remote", "reliable")
 func _sync_delete_token(token_name):
 	var token = $MapArea/MapViewportContainer/MapViewport.get_node_or_null(NodePath(token_name))
@@ -250,7 +261,7 @@ func _do_spawn_token(token_name, world_pos, display_name):
 	
 	var grid_origin = $MapArea/MapViewportContainer/MapViewport/GridOverlay.position
 	var relative_pos = world_pos - grid_origin
-	var cell_size = 70
+	var cell_size = current_cell_size
 	var snapped = Vector2(
 		round(relative_pos.x / cell_size) * cell_size + cell_size / 2,
 		round(relative_pos.y / cell_size) * cell_size + cell_size / 2
@@ -457,3 +468,29 @@ func _on_token_name_confirmed():
 	if token_name_text == "":
 		token_name_text = "Sans nom"
 	spawn_token(right_click_world_pos, token_name_text)
+
+func _on_grid_size_confirmed():
+	current_cell_size = int($GridSizeDialog/GridSizeSpin.value)
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.cell_size = current_cell_size
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.queue_redraw()
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cell_size = current_cell_size
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.queue_redraw()
+	# Mettre à jour le cell_size de tous les tokens existants
+	for child in $MapArea/MapViewportContainer/MapViewport.get_children():
+		if child is Sprite2D and child.name.begins_with("Token"):
+			child.cell_size = current_cell_size
+	add_chat_message("Système", "Taille de grille : " + str(current_cell_size) + "px")
+	
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		_sync_grid_size.rpc(current_cell_size)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_grid_size(size):
+	current_cell_size = size
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.cell_size = size
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.queue_redraw()
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cell_size = size
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.queue_redraw()
+	for child in $MapArea/MapViewportContainer/MapViewport.get_children():
+		if child is Sprite2D and child.name.begins_with("Token"):
+			child.cell_size = size
