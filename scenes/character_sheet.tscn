@@ -52,6 +52,21 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 20
 
+[node name="SaveRow" type="HBoxContainer" parent="Content/VBox" unique_id=132028422]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BtnSave" type="Button" parent="Content/VBox/SaveRow" unique_id=2057617479]
+layout_mode = 2
+text = "Sauvegarder"
+
+[node name="BtnLoad" type="Button" parent="Content/VBox/SaveRow" unique_id=143604749]
+layout_mode = 2
+text = "Charger"
+
+[node name="SaveStatus" type="Label" parent="Content/VBox/SaveRow" unique_id=929268638]
+layout_mode = 2
+
 [node name="IdentityRow" type="HBoxContainer" parent="Content/VBox" unique_id=1212923352]
 layout_mode = 2
 

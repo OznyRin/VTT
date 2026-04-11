@@ -1,9 +1,9 @@
 Label
-TextEdit
 Button
+HBoxContainer
+TextEdit
 SpinBox
 GridContainer
-HBoxContainer
 VBoxContainer
 LineEdit
 ScrollContainer

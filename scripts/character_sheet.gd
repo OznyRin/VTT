@@ -122,6 +122,29 @@ func _ready():
 	for stat in stat_names:
 		_update_modifier(stat, 10)
 
+	# Boutons sauvegarder/charger
+	var save_style = StyleBoxFlat.new()
+	save_style.bg_color = Color("#F5A623")
+	save_style.corner_radius_top_left = 6
+	save_style.corner_radius_top_right = 6
+	save_style.corner_radius_bottom_left = 6
+	save_style.corner_radius_bottom_right = 6
+	var save_hover = save_style.duplicate()
+	save_hover.bg_color = Color("#E8932A")
+	
+	for btn in [$Content/VBox/SaveRow/BtnSave, $Content/VBox/SaveRow/BtnLoad]:
+		btn.add_theme_stylebox_override("normal", save_style)
+		btn.add_theme_stylebox_override("hover", save_hover)
+		btn.add_theme_stylebox_override("pressed", save_hover)
+		btn.add_theme_color_override("font_color", Color("#1A1A1A"))
+		btn.add_theme_color_override("font_hover_color", Color("#1A1A1A"))
+		btn.custom_minimum_size = Vector2(140, 40)
+	
+	$Content/VBox/SaveRow/SaveStatus.add_theme_color_override("font_color", Color("#8A8680"))
+	
+	$Content/VBox/SaveRow/BtnSave.pressed.connect(_on_save)
+	$Content/VBox/SaveRow/BtnLoad.pressed.connect(_on_load)
+	
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
@@ -164,3 +187,78 @@ func get_all_children(node):
 		children.append(child)
 		children.append_array(get_all_children(child))
 	return children
+func _on_save():
+	var data = {
+		"name": $Content/VBox/IdentityRow/NameGroup/NameEdit.text,
+		"class": $Content/VBox/IdentityRow/ClassGroup/ClassEdit.text,
+		"level": $Content/VBox/IdentityRow/LevelGroup/LevelSpin.value,
+		"hp_current": $Content/VBox/HPRow/HPGroup/HPInputs/HPCurrent.value,
+		"hp_max": $Content/VBox/HPRow/HPGroup/HPInputs/HPMax.value,
+		"notes": $Content/VBox/NotesEdit.text,
+		"stats": {}
+	}
+	
+	for stat in stat_names:
+		data["stats"][stat] = $Content/VBox/StatsGrid.get_node("Stat" + stat).value
+	
+	var char_name = data["name"].strip_edges()
+	if char_name == "":
+		char_name = "personnage"
+	
+	var dir = DirAccess.open("user://")
+	if not dir.dir_exists("saves"):
+		dir.make_dir("saves")
+	
+	var file_path = "user://saves/" + char_name.to_lower().replace(" ", "_") + ".json"
+	var file = FileAccess.open(file_path, FileAccess.WRITE)
+	file.store_string(JSON.stringify(data, "\t"))
+	file.close()
+	
+	$Content/VBox/SaveRow/SaveStatus.text = "Sauvegardé : " + char_name
+
+func _on_load():
+	var dir = DirAccess.open("user://saves/")
+	if not dir:
+		$Content/VBox/SaveRow/SaveStatus.text = "Aucune sauvegarde trouvée"
+		return
+	
+	# Charger le dernier fichier trouvé
+	var files = []
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	while file_name != "":
+		if file_name.ends_with(".json"):
+			files.append(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	
+	if files.is_empty():
+		$Content/VBox/SaveRow/SaveStatus.text = "Aucune sauvegarde trouvée"
+		return
+	
+	# Charger le premier fichier trouvé (on améliorera plus tard avec un sélecteur)
+	var file_path = "user://saves/" + files[0]
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	var json_text = file.get_as_text()
+	file.close()
+	
+	var json = JSON.new()
+	var error = json.parse(json_text)
+	if error != OK:
+		$Content/VBox/SaveRow/SaveStatus.text = "Erreur de lecture"
+		return
+	
+	var data = json.data
+	
+	$Content/VBox/IdentityRow/NameGroup/NameEdit.text = data["name"]
+	$Content/VBox/IdentityRow/ClassGroup/ClassEdit.text = data["class"]
+	$Content/VBox/IdentityRow/LevelGroup/LevelSpin.value = data["level"]
+	$Content/VBox/HPRow/HPGroup/HPInputs/HPCurrent.value = data["hp_current"]
+	$Content/VBox/HPRow/HPGroup/HPInputs/HPMax.value = data["hp_max"]
+	$Content/VBox/NotesEdit.text = data["notes"]
+	
+	for stat in stat_names:
+		$Content/VBox/StatsGrid.get_node("Stat" + stat).value = data["stats"][stat]
+		_update_modifier(stat, data["stats"][stat])
+	
+	$Content/VBox/SaveRow/SaveStatus.text = "Chargé : " + data["name"]
