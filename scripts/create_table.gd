@@ -69,6 +69,7 @@ func _on_host_pressed():
 		return
 	
 	multiplayer.multiplayer_peer = peer
+	Global.is_host = true
 	$Content/Status.text = "Serveur lancé sur le port " + str(port) + " — En attente de joueurs..."
 	$Content/Status.add_theme_color_override("font_color", Color("#4CAF50"))
 	$Content/BtnHost.disabled = true

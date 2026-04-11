@@ -83,6 +83,7 @@ func _on_join_pressed():
 		return
 	
 	multiplayer.multiplayer_peer = peer
+	Global.is_host = false
 	$Content/Status.text = "Connexion en cours..."
 	$Content/Status.add_theme_color_override("font_color", Color("#F5A623"))
 	$Content/BtnJoin.disabled = true

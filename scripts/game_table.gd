@@ -132,8 +132,9 @@ func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _input(event):
-	# Fog of War - clic gauche pour révéler/masquer
-	if fog_mode and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	
+	# Fog of War - clic gauche pour révéler/masquer (MJ uniquement)
+	if Global.is_host and fog_mode and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		var cam = $MapArea/MapViewportContainer/MapViewport/Camera
 		var vp = $MapArea/MapViewportContainer/MapViewport
 		var mpos = event.position
@@ -168,18 +169,20 @@ func _input(event):
 		# Construire le menu selon le contexte
 		$MapContextMenu.clear()
 		if right_click_token:
-			$MapContextMenu.add_item("Supprimer le token", 1)
+			if Global.is_host:
+				$MapContextMenu.add_item("Supprimer le token", 1)
 			$MapContextMenu.add_item("Changer la couleur", 2)
 		else:
 			$MapContextMenu.add_item("Ajouter un token", 0)
-			if fog_mode:
-				$MapContextMenu.add_item("Désactiver Fog of War", 4)
-			else:
-				$MapContextMenu.add_item("Activer Fog of War", 3)
-			$MapContextMenu.add_item("Tout révéler", 5)
-			$MapContextMenu.add_item("Tout masquer", 6)
-			$MapContextMenu.add_item("Changer la carte", 7)
-			$MapContextMenu.add_item("Taille de la grille", 8)
+			if Global.is_host:
+				if fog_mode:
+					$MapContextMenu.add_item("Désactiver Fog of War", 4)
+				else:
+					$MapContextMenu.add_item("Activer Fog of War", 3)
+				$MapContextMenu.add_item("Tout révéler", 5)
+				$MapContextMenu.add_item("Tout masquer", 6)
+				$MapContextMenu.add_item("Changer la carte", 7)
+				$MapContextMenu.add_item("Taille de la grille", 8)
 			
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
