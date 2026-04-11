@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://bieq2p2nc4xw3"]
+
+[ext_resource type="Script" uid="uid://qqoeuqr4epp" path="res://scripts/journal_panel.gd" id="1_g3qqd"]
+
+[node name="JournalPanel" type="Control" unique_id=1649588]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g3qqd")
+
+[node name="Background" type="PanelContainer" parent="." unique_id=1582394486]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Background" unique_id=1076020181]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Background/VBox" unique_id=1971812049]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Background/VBox/Header" unique_id=1103254023]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Journal"
+
+[node name="BtnClose" type="Button" parent="Background/VBox/Header" unique_id=1124363434]
+layout_mode = 2
+text = "X"
+
+[node name="NotesList" type="HBoxContainer" parent="Background/VBox" unique_id=144030961]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NoteTabs" type="VBoxContainer" parent="Background/VBox/NotesList" unique_id=496392277]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="BtnNewNote" type="Button" parent="Background/VBox/NotesList/NoteTabs" unique_id=278074325]
+layout_mode = 2
+text = "+ Nouvelle note"
+
+[node name="TabsScroll" type="ScrollContainer" parent="Background/VBox/NotesList/NoteTabs" unique_id=344961162]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TabsList" type="VBoxContainer" parent="Background/VBox/NotesList/NoteTabs/TabsScroll" unique_id=265558798]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NoteContent" type="VBoxContainer" parent="Background/VBox/NotesList" unique_id=825116788]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NoteTitle" type="LineEdit" parent="Background/VBox/NotesList/NoteContent" unique_id=1696824411]
+layout_mode = 2
+placeholder_text = "Titre de la note"
+
+[node name="NoteBody" type="TextEdit" parent="Background/VBox/NotesList/NoteContent" unique_id=1060935006]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Écrivez ici..."
+
+[node name="NoteActions" type="HBoxContainer" parent="Background/VBox/NotesList/NoteContent" unique_id=1318895385]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnSaveNote" type="Button" parent="Background/VBox/NotesList/NoteContent/NoteActions" unique_id=18160504]
+layout_mode = 2
+text = "Sauvegarder"
+
+[node name="BtnDeleteNote" type="Button" parent="Background/VBox/NotesList/NoteContent/NoteActions" unique_id=1285721768]
+layout_mode = 2
+text = "Supprimer"
+
+[node name="BtnShareNote" type="Button" parent="Background/VBox/NotesList/NoteContent/NoteActions" unique_id=647858019]
+layout_mode = 2
+text = "Partager"

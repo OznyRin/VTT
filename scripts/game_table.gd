@@ -128,13 +128,15 @@ func _ready():
 	$GridSizeDialog/GridSizeSpin.value = 70
 	$GridSizeDialog.confirmed.connect(_on_grid_size_confirmed)
 	
+	# Masquer le journal au démarrage
+	$JournalPanel.visible = false
+	
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _input(event):
-	
 	# Fog of War - clic gauche pour révéler/masquer (MJ uniquement)
-	if Global.is_host and fog_mode and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if not $JournalPanel.visible and Global.is_host and fog_mode and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		var cam = $MapArea/MapViewportContainer/MapViewport/Camera
 		var vp = $MapArea/MapViewportContainer/MapViewport
 		var mpos = event.position
@@ -151,7 +153,7 @@ func _input(event):
 		return
 	
 	# Clic droit menu contextuel
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+	if not $JournalPanel.visible and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		var camera = $MapArea/MapViewportContainer/MapViewport/Camera
 		var viewport = $MapArea/MapViewportContainer/MapViewport
 		var mouse_pos = event.position
@@ -183,27 +185,28 @@ func _input(event):
 				$MapContextMenu.add_item("Tout masquer", 6)
 				$MapContextMenu.add_item("Changer la carte", 7)
 				$MapContextMenu.add_item("Taille de la grille", 8)
+				$MapContextMenu.add_item("Journal", 9)
 			
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
 	
-	var camera = $MapArea/MapViewportContainer/MapViewport/Camera
-	
-	# Zoom avec la molette
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			var new_zoom = min(camera.zoom.x + zoom_speed, max_zoom)
-			camera.zoom = Vector2(new_zoom, new_zoom)
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			var new_zoom = max(camera.zoom.x - zoom_speed, min_zoom)
-			camera.zoom = Vector2(new_zoom, new_zoom)
-		elif event.button_index == MOUSE_BUTTON_MIDDLE:
-			is_panning = event.pressed
-	
-	# Pan avec clic molette
-	if event is InputEventMouseMotion and is_panning:
-		camera.position -= event.relative / camera.zoom
-
+	if not $JournalPanel.visible:
+		var camera = $MapArea/MapViewportContainer/MapViewport/Camera
+		
+		# Zoom avec la molette
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+				var new_zoom = min(camera.zoom.x + zoom_speed, max_zoom)
+				camera.zoom = Vector2(new_zoom, new_zoom)
+			elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+				var new_zoom = max(camera.zoom.x - zoom_speed, min_zoom)
+				camera.zoom = Vector2(new_zoom, new_zoom)
+			elif event.button_index == MOUSE_BUTTON_MIDDLE:
+				is_panning = event.pressed
+		
+		# Pan avec clic molette
+		if event is InputEventMouseMotion and is_panning:
+			camera.position -= event.relative / camera.zoom
 func _on_context_menu_pressed(id):
 	if id == 0:
 		$TokenNameDialog/TokenNameEdit.text = ""
@@ -238,6 +241,9 @@ func _on_context_menu_pressed(id):
 		$MapFileDialog.popup_centered()
 	elif id == 8:
 		$GridSizeDialog.popup_centered()
+		
+	elif id == 9:
+		$JournalPanel.visible = true
 		
 @rpc("any_peer", "call_remote", "reliable")
 func _sync_delete_token(token_name):
