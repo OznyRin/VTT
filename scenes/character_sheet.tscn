@@ -1,0 +1,227 @@
+[gd_scene format=3 uid="uid://c6xbgkmobojbr"]
+
+[ext_resource type="Script" uid="uid://bvhu7qcyl0v6a" path="res://scripts/character_sheet.gd" id="1_2ycnj"]
+
+[node name="CharacterSheet" type="Control" unique_id=1727388827]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2ycnj")
+
+[node name="Background" type="ColorRect" parent="." unique_id=861440531]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=572785352]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NavBar" unique_id=92050232]
+layout_mode = 2
+
+[node name="BtnHome" type="Button" parent="NavBar/HBoxContainer" unique_id=1033581845]
+layout_mode = 2
+text = "POUSROLES"
+
+[node name="NavTitle" type="Label" parent="NavBar/HBoxContainer" unique_id=1873707058]
+layout_mode = 2
+text = "/ Fiche de personnage"
+
+[node name="Content" type="ScrollContainer" parent="." unique_id=1081223874]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Content" unique_id=314917482]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="IdentityRow" type="HBoxContainer" parent="Content/VBox" unique_id=1212923352]
+layout_mode = 2
+
+[node name="NameGroup" type="VBoxContainer" parent="Content/VBox/IdentityRow" unique_id=870664158]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Content/VBox/IdentityRow/NameGroup" unique_id=1467773548]
+layout_mode = 2
+text = "Nom"
+
+[node name="NameEdit" type="LineEdit" parent="Content/VBox/IdentityRow/NameGroup" unique_id=622009163]
+layout_mode = 2
+placeholder_text = "Nom du personnage"
+alignment = 1
+expand_to_text_length = true
+
+[node name="ClassGroup" type="VBoxContainer" parent="Content/VBox/IdentityRow" unique_id=1836426431]
+layout_mode = 2
+
+[node name="ClassLabel" type="Label" parent="Content/VBox/IdentityRow/ClassGroup" unique_id=1442028479]
+layout_mode = 2
+text = "Classe"
+
+[node name="ClassEdit" type="LineEdit" parent="Content/VBox/IdentityRow/ClassGroup" unique_id=447087373]
+layout_mode = 2
+placeholder_text = "Classe"
+expand_to_text_length = true
+
+[node name="LevelGroup" type="VBoxContainer" parent="Content/VBox/IdentityRow" unique_id=1825950792]
+layout_mode = 2
+
+[node name="LevelLabel" type="Label" parent="Content/VBox/IdentityRow/LevelGroup" unique_id=1682957504]
+layout_mode = 2
+text = "Niveau"
+
+[node name="LevelSpin" type="SpinBox" parent="Content/VBox/IdentityRow/LevelGroup" unique_id=1570918110]
+layout_mode = 2
+
+[node name="HPRow" type="HBoxContainer" parent="Content/VBox" unique_id=740543931]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HPGroup" type="VBoxContainer" parent="Content/VBox/HPRow" unique_id=774667719]
+layout_mode = 2
+
+[node name="HPLabel" type="Label" parent="Content/VBox/HPRow/HPGroup" unique_id=1316308927]
+layout_mode = 2
+text = "Points de vie"
+
+[node name="HPInputs" type="HBoxContainer" parent="Content/VBox/HPRow/HPGroup" unique_id=286820805]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HPCurrent" type="SpinBox" parent="Content/VBox/HPRow/HPGroup/HPInputs" unique_id=375778278]
+layout_mode = 2
+
+[node name="HPSeparator" type="Label" parent="Content/VBox/HPRow/HPGroup/HPInputs" unique_id=1916155014]
+layout_mode = 2
+text = "/"
+
+[node name="HPMax" type="SpinBox" parent="Content/VBox/HPRow/HPGroup/HPInputs" unique_id=1557665628]
+layout_mode = 2
+
+[node name="StatsTitle" type="Label" parent="Content/VBox" unique_id=1926058055]
+layout_mode = 2
+text = "Caractéristiques"
+
+[node name="StatsGrid" type="GridContainer" parent="Content/VBox" unique_id=1387297693]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="LabelFor" type="Label" parent="Content/VBox/StatsGrid" unique_id=667789267]
+layout_mode = 2
+text = "Force"
+
+[node name="StatFor" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=2092296276]
+layout_mode = 2
+
+[node name="ModFor" type="Label" parent="Content/VBox/StatsGrid" unique_id=249813148]
+layout_mode = 2
+text = "+0"
+
+[node name="RollFor" type="Button" parent="Content/VBox/StatsGrid" unique_id=1430998301]
+layout_mode = 2
+text = "Lancer"
+
+[node name="LabelDex" type="Label" parent="Content/VBox/StatsGrid" unique_id=328843142]
+layout_mode = 2
+text = "Dextérité"
+
+[node name="StatDex" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=1093551251]
+layout_mode = 2
+
+[node name="ModDex" type="Label" parent="Content/VBox/StatsGrid" unique_id=192961789]
+layout_mode = 2
+text = "+0"
+
+[node name="RollDex" type="Button" parent="Content/VBox/StatsGrid" unique_id=718009156]
+layout_mode = 2
+text = "Lancer"
+
+[node name="LabelCon" type="Label" parent="Content/VBox/StatsGrid" unique_id=1837952869]
+layout_mode = 2
+text = "Constitution"
+
+[node name="StatCon" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=484880568]
+layout_mode = 2
+
+[node name="ModCon" type="Label" parent="Content/VBox/StatsGrid" unique_id=559496355]
+layout_mode = 2
+text = "+0"
+
+[node name="RollCon" type="Button" parent="Content/VBox/StatsGrid" unique_id=843019993]
+layout_mode = 2
+text = "Lancer"
+
+[node name="LabelInt" type="Label" parent="Content/VBox/StatsGrid" unique_id=413520500]
+layout_mode = 2
+text = "Intelligence"
+
+[node name="StatInt" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=1955345807]
+layout_mode = 2
+
+[node name="ModInt" type="Label" parent="Content/VBox/StatsGrid" unique_id=1300086543]
+layout_mode = 2
+text = "+0"
+
+[node name="RollInt" type="Button" parent="Content/VBox/StatsGrid" unique_id=1386087781]
+layout_mode = 2
+text = "Lancer"
+
+[node name="LabelSag" type="Label" parent="Content/VBox/StatsGrid" unique_id=488751321]
+layout_mode = 2
+text = "Sagesse"
+
+[node name="StatSag" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=280211891]
+layout_mode = 2
+
+[node name="ModSag" type="Label" parent="Content/VBox/StatsGrid" unique_id=1556880148]
+layout_mode = 2
+text = "+0"
+
+[node name="RollSag" type="Button" parent="Content/VBox/StatsGrid" unique_id=1841528536]
+layout_mode = 2
+text = "Lancer"
+
+[node name="LabelCha" type="Label" parent="Content/VBox/StatsGrid" unique_id=1855462251]
+layout_mode = 2
+text = "Charisme"
+
+[node name="StatCha" type="SpinBox" parent="Content/VBox/StatsGrid" unique_id=1209269124]
+layout_mode = 2
+
+[node name="ModCha" type="Label" parent="Content/VBox/StatsGrid" unique_id=1430837313]
+layout_mode = 2
+text = "+0"
+
+[node name="RollCha" type="Button" parent="Content/VBox/StatsGrid" unique_id=1126832665]
+layout_mode = 2
+text = "Lancer"
+
+[node name="NotesLabel" type="Label" parent="Content/VBox" unique_id=796500029]
+layout_mode = 2
+theme_override_constants/line_spacing = 6
+text = "Notes"
+
+[node name="NotesEdit" type="TextEdit" parent="Content/VBox" unique_id=368896033]
+custom_minimum_size = Vector2(100, 200)
+layout_mode = 2
+placeholder_text = "
+Notes libres ..."
