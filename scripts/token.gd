@@ -46,3 +46,14 @@ func snap_to_grid():
 		round(relative_pos.y / cell_size) * cell_size + cell_size / 2
 	)
 	position = snapped + grid_origin
+	
+	# Synchroniser la position en réseau
+	var mp = multiplayer
+	if mp.has_multiplayer_peer() and mp.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		_sync_position.rpc(str(name), position)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_position(token_name, new_pos):
+	var token = get_parent().get_node_or_null(NodePath(token_name))
+	if token:
+		token.position = new_pos

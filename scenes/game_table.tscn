@@ -152,3 +152,9 @@ layout_mode = 2
 [node name="Tool5" type="PanelContainer" parent="Toolbar/ToolsHBox" unique_id=63527178]
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
+
+[node name="MapFileDialog" type="FileDialog" parent="." unique_id=1420288146]
+title = "Choisir une image"
+size = Vector2i(800, 600)
+file_mode = 0
+access = 2

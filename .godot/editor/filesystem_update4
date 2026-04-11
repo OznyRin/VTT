@@ -6,3 +6,5 @@ res://scripts/create_table.gd
 res://scenes/join_table.tscn
 res://scripts/join_table.gd
 res://scripts/game_table.gd
+res://scripts/token.gd
+res://scenes/game_table.tscn

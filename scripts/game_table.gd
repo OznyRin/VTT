@@ -114,6 +114,9 @@ func _ready():
 	
 	# Connecter le chat
 	$ChatPanel/ChatVBox/ChatInput/ChatLineEdit.text_submitted.connect(_on_chat_submitted)
+	
+	# FileDialog pour la map
+	$MapFileDialog.file_selected.connect(_on_map_file_selected)
 
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
@@ -128,8 +131,12 @@ func _input(event):
 		var wpos = cam.get_screen_center_position() + (mpos - vp_size / 2) / cam.zoom
 		if event.shift_pressed:
 			$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_cell(wpos)
+			if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+				_sync_fog_cover.rpc(wpos)
 		else:
 			$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_cell(wpos)
+			if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+				_sync_fog_reveal.rpc(wpos)
 		return
 	
 	# Clic droit menu contextuel
@@ -161,6 +168,7 @@ func _input(event):
 				$MapContextMenu.add_item("Activer Fog of War", 3)
 			$MapContextMenu.add_item("Tout révéler", 5)
 			$MapContextMenu.add_item("Tout masquer", 6)
+			$MapContextMenu.add_item("Changer la carte", 7)
 		
 		$MapContextMenu.position = Vector2i(int(event.global_position.x), int(event.global_position.y))
 		$MapContextMenu.popup()
@@ -187,8 +195,11 @@ func _on_context_menu_pressed(id):
 		spawn_token(right_click_world_pos)
 	elif id == 1:
 		if right_click_token:
+			var token_name = right_click_token.name
 			right_click_token.queue_free()
 			right_click_token = null
+			if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+				_sync_delete_token.rpc(str(token_name))
 	elif id == 2:
 		if right_click_token:
 			change_token_color(right_click_token)
@@ -201,14 +212,37 @@ func _on_context_menu_pressed(id):
 	elif id == 5:
 		$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_all()
 		add_chat_message("Système", "Toute la carte est révélée")
+		if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+			_sync_fog_reveal_all.rpc()
 	elif id == 6:
 		$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
 		add_chat_message("Système", "Toute la carte est masquée")
+		if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+			_sync_fog_cover_all.rpc()
+	elif id == 7:
+		$MapFileDialog.popup_centered()
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_delete_token(token_name):
+	var token = $MapArea/MapViewportContainer/MapViewport.get_node_or_null(NodePath(token_name))
+	if token:
+		token.queue_free()
 
 func spawn_token(world_pos):
 	token_count += 1
+	var token_name = "Token" + str(multiplayer.get_unique_id()) + "_" + str(token_count)
+	_do_spawn_token(token_name, world_pos)
+	
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		_sync_spawn_token.rpc(token_name, world_pos)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_spawn_token(token_name, world_pos):
+	_do_spawn_token(token_name, world_pos)
+
+func _do_spawn_token(token_name, world_pos):
 	var token = Sprite2D.new()
-	token.name = "Token" + str(token_count)
+	token.name = token_name
 	token.set_script(token_scene)
 	
 	var grid_origin = $MapArea/MapViewportContainer/MapViewport/GridOverlay.position
@@ -343,3 +377,63 @@ func parse_dice_formula(formula: String) -> Dictionary:
 	total += modifier
 	
 	return {"rolls": rolls, "total": total, "modifier": modifier}
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_fog_reveal(wpos):
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_cell(wpos)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_fog_cover(wpos):
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_cell(wpos)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_fog_reveal_all():
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.reveal_all()
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_fog_cover_all():
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
+
+func _on_map_file_selected(path):
+	var image = Image.load_from_file(path)
+	if image == null:
+		add_chat_message("Système", "[color=#D94444]Erreur : impossible de charger l'image[/color]")
+		return
+	
+	var texture = ImageTexture.create_from_image(image)
+	$MapArea/MapViewportContainer/MapViewport/MapSprite.texture = texture
+	
+	# Repositionner la grille et le fog
+	var map_size = texture.get_size()
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.position = -map_size / 2
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.position = -map_size / 2
+	
+	# Recentrer la caméra
+	$MapArea/MapViewportContainer/MapViewport/Camera.position = Vector2.ZERO
+	$MapArea/MapViewportContainer/MapViewport/Camera.zoom = Vector2(1, 1)
+	
+	# Reset le fog
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
+	
+	add_chat_message("Système", "Nouvelle carte chargée")
+	
+	# Synchroniser avec les autres joueurs
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		var img_data = image.save_png_to_buffer()
+		_sync_map_change.rpc(img_data)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_map_change(img_data):
+	var image = Image.new()
+	image.load_png_from_buffer(img_data)
+	var texture = ImageTexture.create_from_image(image)
+	$MapArea/MapViewportContainer/MapViewport/MapSprite.texture = texture
+	
+	var map_size = texture.get_size()
+	$MapArea/MapViewportContainer/MapViewport/GridOverlay.position = -map_size / 2
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.position = -map_size / 2
+	$MapArea/MapViewportContainer/MapViewport/Camera.position = Vector2.ZERO
+	$MapArea/MapViewportContainer/MapViewport/Camera.zoom = Vector2(1, 1)
+	$MapArea/MapViewportContainer/MapViewport/FogOfWar.cover_all()
+	
+	add_chat_message("Système", "Nouvelle carte chargée par le MJ")
