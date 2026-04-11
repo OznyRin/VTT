@@ -77,7 +77,10 @@ func _on_host_pressed():
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 func _on_peer_connected(id):
-	$Content/Status.text = "Joueur connecté ! (ID: " + str(id) + ")"
+	$Content/Status.text = "Joueur connecté ! Lancement de la table..."
+	# Petit délai pour que le joueur voie le message
+	await get_tree().create_timer(1.0).timeout
+	get_tree().change_scene_to_file("res://scenes/game_table.tscn")
 
 func _on_peer_disconnected(id):
 	$Content/Status.text = "Joueur déconnecté (ID: " + str(id) + ")"

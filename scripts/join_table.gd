@@ -91,8 +91,9 @@ func _on_join_pressed():
 	multiplayer.connection_failed.connect(_on_connection_failed)
 
 func _on_connected():
-	$Content/Status.text = "Connecté au serveur !"
-	$Content/Status.add_theme_color_override("font_color", Color("#4CAF50"))
+	$Content/Status.text = "Connecté ! Lancement de la table..."
+	await get_tree().create_timer(1.0).timeout
+	get_tree().change_scene_to_file("res://scenes/game_table.tscn")
 
 func _on_connection_failed():
 	$Content/Status.text = "Connexion échouée — vérifiez l'IP et le port"

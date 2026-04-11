@@ -263,6 +263,14 @@ func _on_chat_submitted(text):
 
 func add_chat_message(sender, text):
 	$ChatPanel/ChatVBox/ChatLog.append_text("[color=#F5A623]" + sender + ":[/color] " + text + "\n")
+	
+	# Envoyer aux autres joueurs si en réseau
+	if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		_sync_chat_message.rpc(sender, text)
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_chat_message(sender, text):
+	$ChatPanel/ChatVBox/ChatLog.append_text("[color=#F5A623]" + sender + ":[/color] " + text + "\n")
 
 func roll_dice(formula):
 	var result = parse_dice_formula(formula)
