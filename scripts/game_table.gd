@@ -131,6 +131,18 @@ func _ready():
 	# Masquer le journal au démarrage
 	$JournalPanel.visible = false
 	
+	# Afficher les connexions/déconnexions
+	if multiplayer.has_multiplayer_peer():
+		multiplayer.peer_connected.connect(_on_player_connected)
+		multiplayer.peer_disconnected.connect(_on_player_disconnected)
+		add_local_message("Système", "Votre ID : " + str(multiplayer.get_unique_id()))
+
+func _on_player_connected(id):
+	add_local_message("Système", "Joueur " + str(id) + " connecté")
+
+func _on_player_disconnected(id):
+	add_local_message("Système", "Joueur " + str(id) + " déconnecté")
+	
 func _on_home_pressed():
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
@@ -326,6 +338,16 @@ func _on_chat_submitted(text):
 	if text.begins_with("/roll ") or text.begins_with("/r "):
 		var formula = text.split(" ", true, 1)[1]
 		roll_dice(formula)
+	elif text.begins_with("/w "):
+		var parts = text.split(" ", true, 2)
+		if parts.size() < 3:
+			add_local_message("Système", "[color=#D94444]Usage: /w ID message[/color]")
+			return
+		var target_id = int(parts[1])
+		var whisper_text = parts[2]
+		add_local_message("Vous → " + str(target_id), "[color=#9B59B6]" + whisper_text + "[/color]")
+		if multiplayer.has_multiplayer_peer() and multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+			_sync_whisper.rpc_id(target_id, whisper_text)
 	else:
 		add_chat_message("Vous", text)
 
@@ -503,3 +525,11 @@ func _sync_grid_size(size):
 	for child in $MapArea/MapViewportContainer/MapViewport.get_children():
 		if child is Sprite2D and child.name.begins_with("Token"):
 			child.cell_size = size
+
+func add_local_message(sender, text):
+	$ChatPanel/ChatVBox/ChatLog.append_text("[color=#F5A623]" + sender + ":[/color] " + text + "\n")
+
+@rpc("any_peer", "call_remote", "reliable")
+func _sync_whisper(text):
+	var sender_id = multiplayer.get_remote_sender_id()
+	add_local_message("Privé de " + str(sender_id), "[color=#9B59B6]" + text + "[/color]")

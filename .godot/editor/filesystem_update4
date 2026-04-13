@@ -1,4 +1,2 @@
 res://scenes/journal_panel.tscn
-res://scripts/journal_panel.gd
-res://scenes/game_table.tscn
 res://scripts/game_table.gd
